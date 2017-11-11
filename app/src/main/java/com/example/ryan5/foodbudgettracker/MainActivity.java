@@ -1,15 +1,31 @@
 package com.example.ryan5.foodbudgettracker;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnReset;
+    private ListView listOfCharges;
+    private TextView txtbalance;
+    private Double balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        btnReset = (Button) findViewById(R.id.btnReset);
+        listOfCharges = (ListView) findViewById(R.id.chargeList);
+        txtbalance = (TextView) findViewById(R.id.txtAmount);
+
+        balance = Double.parseDouble(txtbalance.getText().toString());
     }
 
     @Override
@@ -49,4 +71,31 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public class ChargesAdapter extends BaseAdapter {
+
+        ArrayList<Charges> charges = new ArrayList<Charges>();
+        Button btnEdit;
+
+
+        @Override
+        public int getCount(){return charges.size();}
+
+        @Override
+        public View getView(int item, View view, ViewGroup group){
+
+            if(view == null){
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.list_view_layout, group, false);
+            }
+
+            TextView txtPlace = (TextView) view.findViewById(R.id.txtPlace);
+            TextView txtAmount = (TextView) view.findViewById(R.id.txtAmount);
+            btnEdit = (Button) view.findViewById(R.id.btnEdit);
+
+        }
+
+    }
+
+
 }

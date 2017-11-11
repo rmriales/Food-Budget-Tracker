@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main">
 
     <ListView
+        android:id="@+id/chargeList"
         android:layout_width="367dp"
         android:layout_height="333dp"
         android:layout_marginEnd="8dp"
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="32dp"
-        android:text="Button"
+        android:text="Reset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
