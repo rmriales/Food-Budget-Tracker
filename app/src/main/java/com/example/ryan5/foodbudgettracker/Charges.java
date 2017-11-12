@@ -1,27 +1,47 @@
 package com.example.ryan5.foodbudgettracker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Ryan5 on 11/10/2017.
  */
 
 public class Charges {
     private String place;
-    private String amount;
+    private Double amount;
 
-    public Charges(String place, String amount){
+    private static final String JSON_PLACE = "name";
+    private static final String JSON_AMOUNT = "amount";
+
+    public Charges(String place, Double amount){
         this.place = place;
         this.amount = amount;
+    }
+
+    public Charges(JSONObject jo) throws JSONException{
+        place = jo.getString(JSON_PLACE);
+        amount = jo.getDouble(JSON_AMOUNT);
+    }
+
+    public JSONObject createJSONObject() throws JSONException {
+        JSONObject jo = new JSONObject();
+
+        jo.put(JSON_PLACE, place);
+        jo.put(JSON_AMOUNT, amount);
+
+        return jo;
     }
 
     public String getPlace() {
         return place;
     }
 
-    public String getAmountmount() {
+    public Double getAmountmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listOfCharges;
     private TextView txtbalance;
     private Double balance;
+    private ChargesAdapter mChargesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +74,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void addCharge(Charges c){
+        mChargesAdapter.addCharge(c);
+    }
+
+
     public class ChargesAdapter extends BaseAdapter {
 
         ArrayList<Charges> charges = new ArrayList<Charges>();
         Button btnEdit;
 
+        public ChargesAdapter(){
+            serializer = new JSONSerializer("Charges.JSON",MainActivity.this.getApplicationContext());
+
+            try{
+                charges = serializer.load();
+            }catch(Exception e){
+                charges = new ArrayList<Charges>();
+                Log.e("Error Load accounts: ", "", e);
+            }
+        }
+
+        @Override
+        public Charges getItem(int item){return charges.get(item);}
+
+        @Override
+        public long getItemId(int item){return item;}
 
         @Override
         public int getCount(){return charges.size();}
@@ -93,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
             TextView txtAmount = (TextView) view.findViewById(R.id.txtAmount);
             btnEdit = (Button) view.findViewById(R.id.btnEdit);
 
+            return view;
+        }
+
+        public void addListAccount(Charges c){
+            charges.add(c);
+            notifyDataSetChanged();
         }
 
     }
