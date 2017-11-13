@@ -14,28 +14,26 @@ import android.widget.EditText;
  */
 
 public class NewChargeDialog extends DialogFragment {
-
-    private Double bill;
-    private String name;
-    EditText txtName;
-    EditText txtBill;
-
     public Dialog onCreateDialog(Bundle savedInstanceBundle) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.charge_layout, null);
 
         Button btnDone = (Button) view.findViewById(R.id.btnDone);
-        txtName = (EditText) view.findViewById(R.id.txtName);
-        txtBill = (EditText) view.findViewById(R.id.txtBill);
+        final EditText txtName = (EditText) view.findViewById(R.id.txtName);
+        final EditText txtBill = (EditText) view.findViewById(R.id.txtBill);
+
+        builder.setView(view).setMessage("Add a new charge:");
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name = txtName.getText().toString();
-                bill = Double.parseDouble(txtBill.getText().toString());
+               String name = txtName.getText().toString();
+               Double bill = Double.parseDouble(txtBill.getText().toString());
 
-                Charges charge = new Charges(name, bill);
+                Charges charge = new Charges();
+                charge.setAmount(bill);
+                charge.setPlace(name);
 
                 try{
                     MainActivity callingActivity = (MainActivity) getActivity();
@@ -43,6 +41,7 @@ public class NewChargeDialog extends DialogFragment {
                 }catch(Exception e){
 
                 }
+                dismiss();
             }
         });
 

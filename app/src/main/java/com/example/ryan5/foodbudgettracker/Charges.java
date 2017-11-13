@@ -19,6 +19,8 @@ public class Charges {
         this.amount = amount;
     }
 
+    public Charges(){}
+
     public Charges(JSONObject jo) throws JSONException{
         place = jo.getString(JSON_PLACE);
         amount = jo.getDouble(JSON_AMOUNT);
@@ -37,7 +39,7 @@ public class Charges {
         return place;
     }
 
-    public Double getAmountmount() {
+    public Double getAmount() {
         return amount;
     }
 

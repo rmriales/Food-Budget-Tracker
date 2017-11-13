@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_action_name);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                NewChargeDialog dialog = new NewChargeDialog();
+                dialog.show(getFragmentManager(), null);
             }
         });
 
@@ -49,7 +51,17 @@ public class MainActivity extends AppCompatActivity {
         listOfCharges = (ListView) findViewById(R.id.chargeList);
         txtbalance = (TextView) findViewById(R.id.txtAmount);
 
-        balance = Double.parseDouble(txtbalance.getText().toString());
+        mChargesAdapter = new ChargesAdapter();
+        listOfCharges.setAdapter(mChargesAdapter);
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mChargesAdapter.delete();
+            }
+        });
+
+
     }
 
     @Override
@@ -74,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mChargesAdapter.saveCharges();
+    }
+
 
     public void addCharge(Charges c){
         mChargesAdapter.addCharge(c);
@@ -83,7 +101,10 @@ public class MainActivity extends AppCompatActivity {
     public class ChargesAdapter extends BaseAdapter {
 
         ArrayList<Charges> charges = new ArrayList<Charges>();
-        Button btnEdit;
+        ImageButton btnEdit;
+        ImageButton btnDel;
+        JSONSerializer serializer;
+        private double balance;
 
         public ChargesAdapter(){
             serializer = new JSONSerializer("Charges.JSON",MainActivity.this.getApplicationContext());
@@ -93,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
             }catch(Exception e){
                 charges = new ArrayList<Charges>();
                 Log.e("Error Load accounts: ", "", e);
+            }
+        }
+
+        public void saveCharges(){
+            try {
+                serializer.save(charges);
+            }catch(Exception e){
+                Log.e("eEror Save accounts", "", e);
             }
         }
 
@@ -115,13 +144,48 @@ public class MainActivity extends AppCompatActivity {
 
             TextView txtPlace = (TextView) view.findViewById(R.id.txtPlace);
             TextView txtAmount = (TextView) view.findViewById(R.id.txtAmount);
-            btnEdit = (Button) view.findViewById(R.id.btnEdit);
+            TextView txtBalance = (TextView) findViewById(R.id.remBalance);
+            btnEdit = (ImageButton) view.findViewById(R.id.btnEdit);
+            btnDel = (ImageButton) view.findViewById(R.id.btnDel);
+
+            final Charges tempCharge = charges.get(item);
+
+            balance = Double.parseDouble(txtBalance.getText().toString());
+            txtBalance.setText(String.valueOf(balance - tempCharge.getAmount()));
+
+            txtPlace.setText(tempCharge.getPlace());
+            txtAmount.setText(tempCharge.getAmount().toString());
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NewChargeDialog dialog = new NewChargeDialog();
+                    dialog.show(getFragmentManager(), "123");
+                }
+            });
+
+            btnDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    delete(charges.indexOf(tempCharge));
+                }
+            });
 
             return view;
         }
 
-        public void addListAccount(Charges c){
+        public void addCharge(Charges c){
             charges.add(c);
+            notifyDataSetChanged();
+        }
+
+        public void delete(){
+            charges.clear();
+            notifyDataSetChanged();
+        }
+
+        public void delete(int item){
+            charges.remove(item);
             notifyDataSetChanged();
         }
 
