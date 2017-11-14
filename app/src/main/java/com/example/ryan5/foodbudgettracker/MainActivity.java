@@ -1,6 +1,7 @@
 package com.example.ryan5.foodbudgettracker;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnReset;
     private ListView listOfCharges;
     private TextView txtbalance;
-    private Double balance;
+    private Double balance = 120.00;
     private ChargesAdapter mChargesAdapter;
 
     @Override
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         btnReset = (Button) findViewById(R.id.btnReset);
         listOfCharges = (ListView) findViewById(R.id.chargeList);
         txtbalance = (TextView) findViewById(R.id.txtAmount);
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 mChargesAdapter.delete();
             }
         });
-
 
     }
 
@@ -150,8 +151,11 @@ public class MainActivity extends AppCompatActivity {
 
             final Charges tempCharge = charges.get(item);
 
-            balance = Double.parseDouble(txtBalance.getText().toString());
-            txtBalance.setText(String.valueOf(balance - tempCharge.getAmount()));
+            Double balance =  120.00 - tempCharge.getAmount();
+
+            Resources res = getResources();
+            String text = String.format(res.getString(R.string.updated_balance), balance);
+            txtBalance.setText(text);
 
             txtPlace.setText(tempCharge.getPlace());
             txtAmount.setText(tempCharge.getAmount().toString());
