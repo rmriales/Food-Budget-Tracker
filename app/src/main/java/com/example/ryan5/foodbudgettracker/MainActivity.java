@@ -152,10 +152,15 @@ public class MainActivity extends AppCompatActivity {
             btnDel = (ImageButton) view.findViewById(R.id.btnDel);
 
             final Charges tempCharge = charges.get(item);
-
-            Double balance = Double.parseDouble(txtBalance.getText().toString().substring(1));
-            balance =  balance - tempCharge.getAmount();
-
+            
+            if(item == 0){
+                Double balance = 120.00;
+                balance =  balance - tempCharge.getAmount();
+            }else{
+                Double balance = Double.parseDouble(txtBalance.getText().toString().substring(1));
+                balance =  balance - tempCharge.getAmount();  
+            }
+            
             Resources res = getResources();
             String text = String.format(res.getString(R.string.updated_balance), balance);
             txtBalance.setText(text);
