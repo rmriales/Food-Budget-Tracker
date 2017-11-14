@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnReset = (Button) findViewById(R.id.btnReset);
         listOfCharges = (ListView) findViewById(R.id.chargeList);
-        txtbalance = (TextView) findViewById(R.id.txtAmount);
 
         mChargesAdapter = new ChargesAdapter();
         listOfCharges.setAdapter(mChargesAdapter);
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mChargesAdapter.delete();
+                txtbalance = (TextView) view.findViewById(R.id.txtAmount);
+                txtbalance.setText("$120.00");
             }
         });
 
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
             TextView txtPlace = (TextView) view.findViewById(R.id.txtPlace);
             TextView txtAmount = (TextView) view.findViewById(R.id.txtAmount);
-            TextView txtBalance = (TextView) findViewById(R.id.remBalance);
+            final TextView txtBalance = (TextView) findViewById(R.id.remBalance);
             btnEdit = (ImageButton) view.findViewById(R.id.btnEdit);
             btnDel = (ImageButton) view.findViewById(R.id.btnDel);
 
@@ -163,8 +165,14 @@ public class MainActivity extends AppCompatActivity {
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NewChargeDialog dialog = new NewChargeDialog();
+                    Bundle mArgs = new Bundle();
+                    mArgs.putDouble("price",tempCharge.getAmount());
+                    mArgs.putString("name",tempCharge.getPlace());
+
+                    EditChargeDialog dialog = new EditChargeDialog();
+                    dialog.setArguments(mArgs);
                     dialog.show(getFragmentManager(), "123");
+                    delete(charges.indexOf(tempCharge));
                 }
             });
 
@@ -172,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     delete(charges.indexOf(tempCharge));
+                    if(charges.size()<1){
+                        txtBalance.setText("$120.00");
+                    }
                 }
             });
 
