@@ -153,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
 
             final Charges tempCharge = charges.get(item);
 
-            Double balance =  120.00 - tempCharge.getAmount();
+            Double balance = Double.parseDouble(txtBalance.getText().toString().substring(1));
+            balance =  balance - tempCharge.getAmount();
 
             Resources res = getResources();
             String text = String.format(res.getString(R.string.updated_balance), balance);
