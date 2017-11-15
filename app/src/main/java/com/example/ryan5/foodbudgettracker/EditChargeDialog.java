@@ -18,6 +18,7 @@ public class EditChargeDialog extends DialogFragment {
         Bundle mArgs = getArguments();
         Double price = mArgs.getDouble("price");
         String name = mArgs.getString("name");
+        final int index = mArgs.getInt("index");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -45,7 +46,7 @@ public class EditChargeDialog extends DialogFragment {
 
                 try{
                     MainActivity callingActivity = (MainActivity) getActivity();
-                    callingActivity.addCharge(charge);
+                    callingActivity.updateCharge(charge,index);
                 }catch(Exception e){
 
                 }

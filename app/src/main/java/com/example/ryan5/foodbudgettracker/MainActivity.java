@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private Button btnReset;
     private ListView listOfCharges;
     private TextView txtbalance;
-    private Double balance = 120.00;
     private ChargesAdapter mChargesAdapter;
 
     @Override
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mChargesAdapter.delete();
-                txtbalance = (TextView) view.findViewById(R.id.txtAmount);
+                txtbalance = (TextView) findViewById(R.id.remBalance);
                 txtbalance.setText("$120.00");
             }
         });
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     public void addCharge(Charges c){
         mChargesAdapter.addCharge(c);
     }
+    public void updateCharge(Charges c, int index){mChargesAdapter.updateCharge(c,index);}
 
 
     public class ChargesAdapter extends BaseAdapter {
@@ -152,18 +153,17 @@ public class MainActivity extends AppCompatActivity {
             btnDel = (ImageButton) view.findViewById(R.id.btnDel);
 
             final Charges tempCharge = charges.get(item);
-            
-            if(item == 0){
-                Double balance = 120.00;
-                balance =  balance - tempCharge.getAmount();
-            }else{
-                Double balance = Double.parseDouble(txtBalance.getText().toString().substring(1));
-                balance =  balance - tempCharge.getAmount();  
+
+            Double balance = 120.00;
+
+            for(int i = 0; i < charges.size(); i++){
+                balance -= charges.get(i).getAmount();
             }
-            
+
             Resources res = getResources();
             String text = String.format(res.getString(R.string.updated_balance), balance);
             txtBalance.setText(text);
+
 
             txtPlace.setText(tempCharge.getPlace());
             txtAmount.setText(tempCharge.getAmount().toString());
@@ -174,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
                     Bundle mArgs = new Bundle();
                     mArgs.putDouble("price",tempCharge.getAmount());
                     mArgs.putString("name",tempCharge.getPlace());
+                    mArgs.putInt("index", charges.indexOf(tempCharge));
 
                     EditChargeDialog dialog = new EditChargeDialog();
                     dialog.setArguments(mArgs);
                     dialog.show(getFragmentManager(), "123");
-                    delete(charges.indexOf(tempCharge));
                 }
             });
 
@@ -192,6 +192,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            listOfCharges.setRecyclerListener(new AbsListView.RecyclerListener() {
+                @Override
+                public void onMovedToScrapHeap(View view){
+                    txtBalance.setText(txtBalance.getText().toString());
+                }
+            });
+
             return view;
         }
 
@@ -199,6 +206,12 @@ public class MainActivity extends AppCompatActivity {
             charges.add(c);
             notifyDataSetChanged();
         }
+
+        public void updateCharge(Charges c, int index){
+            charges.set(index,c);
+            notifyDataSetChanged();
+        }
+
 
         public void delete(){
             charges.clear();
