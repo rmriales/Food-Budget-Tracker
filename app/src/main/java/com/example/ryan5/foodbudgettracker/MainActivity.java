@@ -2,6 +2,7 @@ package com.example.ryan5.foodbudgettracker;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.ic_action_name);
+        fab.setImageResource(R.mipmap.ic_add_charge_round);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             txtPlace.setText(tempCharge.getPlace());
-            txtAmount.setText(tempCharge.getAmount().toString());
+            text = String.format(res.getString(R.string.updated_balance), Double.parseDouble(tempCharge.getAmount().toString()));
+            txtAmount.setText(text);
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override

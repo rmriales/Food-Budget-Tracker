@@ -23,6 +23,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
         android:ems="10"
+        android:backgroundTint="#0000FF"
+        android:hint="@string/restuarant_hint"
         android:inputType="textCapWords"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,8 +46,9 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="136dp"
         android:ems="10"
+        android:backgroundTint="#0000FF"
         android:inputType="numberDecimal"
-        android:text="0.00"
+        android:hint="@string/bill_hint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
