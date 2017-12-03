@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView listOfCharges;
     private TextView txtbalance;
     private ChargesAdapter mChargesAdapter;
+    private Button btnEditBalance;
+    private Double balance = 120.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnReset = (Button) findViewById(R.id.btnReset);
+        btnEditBalance = (Button) findViewById(R.id.editBalance);
         listOfCharges = (ListView) findViewById(R.id.chargeList);
 
         mChargesAdapter = new ChargesAdapter();
@@ -62,10 +66,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mChargesAdapter.delete();
                 txtbalance = (TextView) findViewById(R.id.remBalance);
-                txtbalance.setText("$120.00");
+                txtbalance.setText(balance.toString());
             }
         });
-
     }
 
     @Override
@@ -96,12 +99,25 @@ public class MainActivity extends AppCompatActivity {
         mChargesAdapter.saveCharges();
     }
 
+    protected void balanceEdit(View view){
+        txtbalance = (TextView) view.findViewById(R.id.remBalance);
+        txtbalance.setCursorVisible(true);
+        txtbalance.setFocusableInTouchMode(true);
+        txtbalance.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        txtbalance.requestFocus(); //to trigger the soft input
+        txtbalance.setText(txtbalance.getText().toString());
+        balance = Double.parseDouble(txtbalance.getText().toString());
+        mChargesAdapter.notifyDataSetChanged();
+        //view.setFocusableInTouchMode(false);
+        //view.setCursorVisible(false);
+    }
+
 
     public void addCharge(Charges c){
         mChargesAdapter.addCharge(c);
     }
     public void updateCharge(Charges c, int index){mChargesAdapter.updateCharge(c,index);}
-
+    public Double getBalance(){return balance;}
 
     public class ChargesAdapter extends BaseAdapter {
 
@@ -155,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
             final Charges tempCharge = charges.get(item);
 
-            Double balance = 120.00;
+            Double balance = getBalance();
 
             for(int i = 0; i < charges.size(); i++){
                 balance -= charges.get(i).getAmount();
@@ -189,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     delete(charges.indexOf(tempCharge));
                     if(charges.size()<1){
-                        txtBalance.setText("$120.00");
+                        txtBalance.setText(getBalance().toString());
                     }
                 }
             });

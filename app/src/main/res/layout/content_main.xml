@@ -30,6 +30,8 @@
         android:gravity="center"
         android:text="@string/starting_balance"
         android:textSize="36sp"
+        android:onClick="balanceEdit"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +54,23 @@
         android:id="@+id/btnReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/button_style"
         android:text="Reset"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editBalance"
+        android:layout_width="148dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="156dp"
+        android:background="@drawable/button_style"
+        android:text="@string/edit_balance"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
