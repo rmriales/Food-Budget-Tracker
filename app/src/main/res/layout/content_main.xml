@@ -64,10 +64,10 @@
 
     <Button
         android:id="@+id/editBalance"
-        android:layout_width="148dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
-        android:layout_marginStart="156dp"
+        android:layout_marginStart="144dp"
         android:background="@drawable/button_style"
         android:text="@string/edit_balance"
         android:textColor="@color/colorAccent"

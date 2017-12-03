@@ -66,7 +66,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mChargesAdapter.delete();
                 txtbalance = (TextView) findViewById(R.id.remBalance);
-                txtbalance.setText(balance.toString());
+                Resources res = getResources();
+                String text = String.format(res.getString(R.string.updated_balance), balance);
+                txtbalance.setText(text);
+            }
+        });
+
+        btnEditBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeBudgetAmountDialog dialog = new ChangeBudgetAmountDialog();
+                dialog.show(getFragmentManager(), null);
             }
         });
     }
@@ -99,17 +109,16 @@ public class MainActivity extends AppCompatActivity {
         mChargesAdapter.saveCharges();
     }
 
-    protected void balanceEdit(View view){
-        txtbalance = (TextView) view.findViewById(R.id.remBalance);
-        txtbalance.setCursorVisible(true);
-        txtbalance.setFocusableInTouchMode(true);
-        txtbalance.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        txtbalance.requestFocus(); //to trigger the soft input
-        txtbalance.setText(txtbalance.getText().toString());
-        balance = Double.parseDouble(txtbalance.getText().toString());
-        mChargesAdapter.notifyDataSetChanged();
-        //view.setFocusableInTouchMode(false);
-        //view.setCursorVisible(false);
+    public void updateBudgetAmount(Double bal){
+        balance = bal;
+        if(mChargesAdapter.getCount() < 1){
+            txtbalance = (TextView) findViewById(R.id.remBalance);
+            Resources res = getResources();
+            String text = String.format(res.getString(R.string.updated_balance), balance);
+            txtbalance.setText(text);
+        }else {
+            mChargesAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -205,7 +214,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     delete(charges.indexOf(tempCharge));
                     if(charges.size()<1){
-                        txtBalance.setText(getBalance().toString());
+                        Resources res = getResources();
+                        String text = String.format(res.getString(R.string.updated_balance), getBalance());
+                        txtBalance.setText(text);
                     }
                 }
             });
