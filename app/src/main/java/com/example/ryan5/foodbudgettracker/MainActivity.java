@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btnDel;
         JSONSerializer serializer;
         private double balance;
+        private int prevPosition = -1;
 
         public ChargesAdapter(){
             serializer = new JSONSerializer("Charges.JSON",MainActivity.this.getApplicationContext());
@@ -194,6 +199,10 @@ public class MainActivity extends AppCompatActivity {
             txtPlace.setText(tempCharge.getPlace());
             text = String.format(res.getString(R.string.updated_balance), Double.parseDouble(tempCharge.getAmount().toString()));
             txtAmount.setText(text);
+
+            Animation anim = AnimationUtils.loadAnimation(MainActivity.this, (item > prevPosition) ? R.anim.up_from_botton : R.anim.down_from_top);
+            view.startAnimation(anim);
+            prevPosition = item;
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
