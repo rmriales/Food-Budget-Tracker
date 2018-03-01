@@ -8,4 +8,5 @@
     <string name="restuarant_hint">Panera Bread</string>
     <string name="edit_balance">Change Budget Amount</string>
     <string name="change_balance">Enter new budget amount:</string>
+    <string name ="bal">120.00</string>
 </resources>

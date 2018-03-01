@@ -1,6 +1,7 @@
 package com.example.ryan5.foodbudgettracker;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtbalance;
     private ChargesAdapter mChargesAdapter;
     private Button btnEditBalance;
-    private Double balance = 120.00;
+    private Double balance;
+    private SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sharedPrefs = this.getPreferences(Context.MODE_PRIVATE);
+        balance = Double.longBitsToDouble(sharedPrefs.getLong("bal", (long)120.00));
 
         btnReset = (Button) findViewById(R.id.btnReset);
         btnEditBalance = (Button) findViewById(R.id.editBalance);
@@ -115,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateBudgetAmount(Double bal){
         balance = bal;
+        sharedPrefs = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putLong("bal",Double.doubleToLongBits(balance));
+        editor.commit();
         if(mChargesAdapter.getCount() < 1){
             txtbalance = (TextView) findViewById(R.id.remBalance);
             Resources res = getResources();

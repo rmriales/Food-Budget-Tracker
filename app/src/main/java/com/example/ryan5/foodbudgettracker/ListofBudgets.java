@@ -28,7 +28,7 @@ public class ListofBudgets extends Activity {
     }
 
     public class BudgetsAdapter extends BaseAdapter{
-        priavte ArrayList<Budgets> = new ArrayList<Budgets>();
+        //priavte ArrayList<Budgets> = new ArrayList<Budgets>();
         @Override
         public int getCount() {
             return 0;
